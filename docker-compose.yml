@@ -1,3 +1,61 @@
-# THIS IS INITIAL COMMIT
+version: '3.8'
 
-# Please check in 'develop' branch
+networks:
+  tasha-network:
+    driver: bridge
+
+services:
+  mongo:
+    image: mongo:4.0.28-xenial
+    env_file:
+      - configuration.env
+    ports:
+      - 27017:27017
+    networks:
+      - tasha-network
+    volumes:
+      - mongo-data:/data/db
+
+  postgres:
+    image: postgres
+    env_file:
+      - configuration.env
+    ports:
+      - 5432:5432
+    networks:
+      - tasha-network
+    volumes:
+      - postgres-data:/data/db
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    networks:
+      - tasha-network
+
+  zookeeper:
+    image: bitnami/zookeeper:3.8
+    env_file:
+      - configuration.env
+    ports:
+      - 2181:2181
+    networks:
+      - tasha-network
+
+  kafka:
+    image: bitnami/kafka:3.3
+    depends_on:
+      - zookeeper
+    env_file:
+      - configuration.env
+    ports:
+      - 9092:9092
+    networks:
+      - tasha-network
+
+volumes:
+  mongo-data:
+    name: mongo-data
+  postgres-data:
+    name: postgres-data
