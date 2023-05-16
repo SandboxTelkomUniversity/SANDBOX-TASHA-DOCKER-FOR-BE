@@ -16,16 +16,16 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  postgres:
-    image: postgres
+  mysql:
+    image: mysql:8.0.33
     env_file:
       - configuration.env
     ports:
-      - 5432:5432
+      - 3306:3306
     networks:
       - tasha-network
     volumes:
-      - postgres-data:/data/db
+      - mysql-data:/data/db
 
   redis:
     image: redis:alpine
@@ -57,5 +57,5 @@ services:
 volumes:
   mongo-data:
     name: mongo-data
-  postgres-data:
-    name: postgres-data
+  mysql-data:
+    name: mysql-data
