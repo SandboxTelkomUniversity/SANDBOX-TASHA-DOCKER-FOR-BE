@@ -5,6 +5,13 @@ networks:
     driver: bridge
 
 services:
+  apache:
+    image: httpd:2.4.57-bullseye
+    ports:
+      - 80:80
+    networks:
+      - tasha-network
+
   mongo:
     image: mongo:4.0.28-xenial
     env_file:
@@ -26,6 +33,18 @@ services:
       - tasha-network
     volumes:
       - mysql-data:/data/db
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+    networks:
+      - tasha-network
 
   redis:
     image: redis:alpine
