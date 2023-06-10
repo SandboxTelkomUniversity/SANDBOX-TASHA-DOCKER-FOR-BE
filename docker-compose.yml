@@ -1,3 +1,40 @@
-# THIS IS INITIAL COMMIT
+version: '3.8'
 
-# Please check in 'develop' branch
+networks:
+  tasha-network:
+    driver: bridge
+
+services:
+  apache:
+    image: httpd:2.4.57-bullseye
+    ports:
+      - 80:80
+    networks:
+      - tasha-network
+
+  mysql:
+    image: mysql:8.0.33
+    env_file:
+      - configuration.env
+    ports:
+      - 3306:3306
+    networks:
+      - tasha-network
+    volumes:
+      - mysql-data:/data/db
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+    networks:
+      - tasha-network
+
+volumes:
+  mysql-data:
+    name: mysql-data
