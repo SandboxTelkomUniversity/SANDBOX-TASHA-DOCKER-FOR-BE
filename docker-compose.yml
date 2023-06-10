@@ -35,26 +35,6 @@ services:
     networks:
       - tasha-network
 
-  mongo:
-    image: mongo:4.0.28-xenial
-    env_file:
-      - configuration.env
-    ports:
-      - 27017:27017
-    networks:
-      - tasha-network
-    volumes:
-      - mongo-data:/data/db
-
-  redis:
-    image: redis:alpine
-    ports:
-      - 6379:6379
-    networks:
-      - tasha-network
-
 volumes:
-  mongo-data:
-    name: mongo-data
   mysql-data:
     name: mysql-data
